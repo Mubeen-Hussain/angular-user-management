@@ -1,0 +1,45 @@
+<div class="wrapper">
+  <div class="title-text" style="margin-left: {{loginTextMargin}};">
+    <div class="title login">Login Form</div>
+    <div class="title signup">Signup Form</div>
+  </div>
+  <div class="form-container">
+    <div class="slide-controls">
+      <input type="radio" name="slide" id="login" [checked]="selectedSlide == 'login'">
+      <input type="radio" name="slide" id="signup" [checked]="selectedSlide == 'signup'">
+      <label for="login" (click)="loginTextBtn()" class="slide login">Login</label>
+      <label for="signup" (click)="signUpTextBtn()" class="slide signup">Signup</label>
+      <div class="slider-tab"></div>
+    </div>
+    <div class="form-inner">
+      <form action="#" style="margin-left: {{loginFormMargin}};" class="login">
+        <div class="field">
+          <input type="text" [(ngModel)]="loginModel.email" name="email" placeholder="Email Address" required>
+        </div>
+        <div class="field">
+          <input type="password" [(ngModel)]="loginModel.password" name="password" placeholder="Password" required>
+        </div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" (click)="loginBtn()" value="Login">
+        </div>
+        <div class="signup-link">Not a member? <a href="" (click)="navigateToSignUp($event)">Signup now</a></div>
+      </form>
+      <form action="#" class="signup">
+        <div class="field">
+          <input type="text" [(ngModel)]="registerModel.name" name="name" placeholder="Full Name" required>
+        </div>
+        <div class="field">
+          <input type="text" [(ngModel)]="registerModel.email" name="email" placeholder="Email" required>
+        </div>
+        <div class="field">
+          <input type="password" [(ngModel)]="registerModel.password" name="password" placeholder="Password" required>
+        </div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" (click)="signUpBtn()" value="Signup">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
