@@ -1,5 +1,8 @@
 export class RegisterModel{
-    name: string = "";
+    name:string = "";
+    username:string = "";
     email: string = "";
     password: string = "";
+    phoneNumber:string = "";
+    role:string = "";
 }

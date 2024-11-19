@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RegisterModel } from '../../models/RegisterModel';
 import { LoginModel } from '../../models/LoginModel';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -22,6 +23,7 @@ export class AuthComponent {
   users: RegisterModel[] = [];
 
   snackBar = inject(MatSnackBar);
+  authService = inject(AuthService);
 
   loginTextBtn() {
     this.loginFormMargin = "0%";
@@ -41,58 +43,48 @@ export class AuthComponent {
   }
 
   signUpBtn() {
-    // Retrieve data from localStorage
-    const local = localStorage.getItem('users');
-    if (local != null) {
-      // Parse the existing users
-      this.users = JSON.parse(local);
+    const contactNo: string = Math.round((Math.random() * 100) + 100).toString();
 
-      // Check if the user already exists
-      const checkUser = this.users.find(x => x.email === this.registerModel.email);
-      if (checkUser) {
-        this.snackBar.open('User already exist!', 'Close', { duration: 3000 });
-        return;
-      }
+    var registerRequest = new RegisterModel();
+    registerRequest.name = this.registerModel.username;
+    registerRequest.username = this.registerModel.username;
+    registerRequest.email = this.registerModel.email;
+    registerRequest.phoneNumber = contactNo;
+    registerRequest.password = this.registerModel.password;
+    registerRequest.role = "User";
 
-      // Add the new user to the array
-      this.users.push(this.registerModel);
-    } else {
-      // If no users exist, initialize the array with the new user
-      this.users = [this.registerModel];
-    }
-
-    // Update localStorage with the new users array
-    localStorage.setItem('users', JSON.stringify(this.users));
-
-
-    this.snackBar.open('User registered successfully.', 'Close', { duration: 3000 });
-
-    this.registerModel = new RegisterModel();
-
-    this.loginTextBtn();
+    this.authService.register(registerRequest)
+      .subscribe({
+        next: (response: any) => {
+          if (!response.error) {
+            this.snackBar.open(response.data, 'Close', { duration: 3000 });
+            this.registerModel = new RegisterModel();
+            this.loginTextBtn();
+          } else {
+            this.snackBar.open(response.message, 'Close', { duration: 3000 });
+          }
+        },
+        error: (err: any) => {
+          debugger;
+          this.snackBar.open(err.message, 'Close', { duration: 3000 });
+        }
+      });
   }
 
   loginBtn() {
-    // Retrieve data from localStorage
-    const local = localStorage.getItem('users');
-    if (local != null) {
-      // Parse the existing users
-      this.users = JSON.parse(local);
-
-      // Check if the user already exists
-      const checkUser = this.users.find(x => x.email === this.loginModel.email && x.password == this.loginModel.password);
-      if (!checkUser) {
-        this.snackBar.open('Invalid email or password!', 'Close', { duration: 3000 });
-        return;
-      }
-
-      this.snackBar.open('Login successfully.', 'Close', { duration: 3000 });
-
-      this.loginModel = new LoginModel();
-    } else {
-      this.snackBar.open('Invalid email or password!', 'Close', { duration: 3000 });
-      return;
-    }
+    this.authService.login(this.loginModel)
+      .subscribe({
+        next: (response: any) => {
+          if (!response.error) {
+            this.snackBar.open("Login successfully.", 'Close', { duration: 3000 });
+          } else {
+            this.snackBar.open(response.message, 'Close', { duration: 3000 });
+          }
+        },
+        error: (err: any) => {
+          this.snackBar.open(err.message, 'Close', { duration: 3000 });
+        }
+      });
   }
 
 }

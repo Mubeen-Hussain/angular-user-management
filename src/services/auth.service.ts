@@ -10,7 +10,7 @@ import { LoginModel } from '../models/LoginModel';
 
 export class AuthService {
 
-  httpClient = inject(HttpClient);
+  private httpClient = inject(HttpClient);
 
   register(registerModel: RegisterModel) {
     return this.httpClient.post(AppConstants.BASE_URL + AppConstants.REGISTER_USER, registerModel);
