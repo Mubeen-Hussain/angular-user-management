@@ -64,6 +64,7 @@ export class AuthComponent {
     // Update localStorage with the new users array
     localStorage.setItem('users', JSON.stringify(this.users));
 
+
     this.snackBar.open('User registered successfully.', 'Close', { duration: 3000 });
 
     this.registerModel = new RegisterModel();
