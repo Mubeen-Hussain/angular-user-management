@@ -65,7 +65,6 @@ export class AuthComponent {
           }
         },
         error: (err: any) => {
-          debugger;
           this.snackBar.open(err.message, 'Close', { duration: 3000 });
         }
       });
